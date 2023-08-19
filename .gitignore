@@ -1,6 +1,7 @@
-/cmake-build-debug
-/.idea
-/CMakeLists.txt
+cmake-build-debug
+.idea
+CMakeLists.txt
+.clang-format
 
 # DS_Store
 *.DS_Store

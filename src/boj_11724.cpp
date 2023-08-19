@@ -1,61 +1,50 @@
 #include <iostream>
-#include <map>
+#include <vector>
 
-enum node_state {
-    UNLINKED,
-    LINKED,
-};
+using namespace std;
 
-std::map<int, bool> remain_vertex;
-int **node_map;
-int vertex_count, edge_count, link_count;
+int vertexCnt, edgeCnt, connectionCount;
+vector< vector< int > > graph;
+vector< int > visitedVertexes;
 
-void init_node_map() {
-    std::cin >> vertex_count >> edge_count;
+void dfs(int vertexNumber)
+{
+    for (int i = 0; i < graph[vertexNumber].size(); i++)
+    {
+        if (find(visitedVertexes.begin(), visitedVertexes.end(), graph[vertexNumber][i]) != visitedVertexes.end())
+            continue;
 
-    node_map = new int *[vertex_count + 1];
-    for (int i = 0; i < vertex_count + 1; i++) {
-        node_map[i] = new int[vertex_count + 1];
-    }
-
-    for (int i = 0; i < vertex_count + 1; i++) {
-        for (int j = 0; j < vertex_count + 1; j++) {
-            std::cout << node_map[i][j];
-        }
-        std::cout << std::endl;
+        visitedVertexes.push_back(graph[vertexNumber][i]);
+        dfs(graph[vertexNumber][i]);
     }
 }
 
-void init_edge() {
-    int vertex_a, vertex_b;
+int main(void)
+{
+    cin >> vertexCnt >> edgeCnt;
 
-    std::cin >> vertex_a >> vertex_b;
-    node_map[vertex_a][vertex_b] = LINKED;
-    node_map[vertex_b][vertex_a] = LINKED;
-}
+    graph.resize(vertexCnt);
 
-void init_remain_vertex() {
-    for (int i = 1; i <= vertex_count; i++) {
-        remain_vertex.insert(std::make_pair(i, true));
+    for (int i = 0; i < edgeCnt; i++)
+    {
+        int u, v;
+
+        cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
     }
-}
 
-void count_link() {
-    while (remain_vertex.size() != 0) {
-        std::map<int,bool>::iterator iter = remain_vertex.begin();
-        std::pair<int, bool> current_vertex = *iter;
-        remain_vertex.erase(iter);
+    for (int i = 0; i < vertexCnt; i++)
+    {
+        if (find(visitedVertexes.begin(), visitedVertexes.end(), i) != visitedVertexes.end())
+            continue;
 
-        flood_fill();
-        link_count++;
+        visitedVertexes.push_back(i);
+        dfs(i);
+        connectionCount++;
     }
-}
 
-int main(void) {
-    init_node_map();
-    init_edge();
-    init_remain_vertex();
-    count_link();
+    cout << connectionCount << endl;
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ int main(void)
 {
     cin >> vertexCnt >> edgeCnt;
 
-    graph.resize(vertexCnt);
+    graph.resize(vertexCnt + 1);
 
     for (int i = 0; i < edgeCnt; i++)
     {
@@ -34,7 +35,7 @@ int main(void)
         graph[v].push_back(u);
     }
 
-    for (int i = 0; i < vertexCnt; i++)
+    for (int i = 1; i < vertexCnt + 1; i++)
     {
         if (find(visitedVertexes.begin(), visitedVertexes.end(), i) != visitedVertexes.end())
             continue;
